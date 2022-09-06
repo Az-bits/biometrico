@@ -1,4 +1,3 @@
-insert into reporte values (null,'11111111', 'Sara', 'Ali','2017-01-01' ,null,null,null,null,null,'120');
 insert into reporte values (null,'11111111', 'Sara', 'Ali','2017-01-03' ,'08:30:00','12:30:00','14:00:00','18:00:00',null,null);
 insert into reporte values (null,'11111111', 'Sara', 'Ali','2017-01-02' ,'08:30:00','12:30:00','14:00:00','18:00:00',null,null);
 insert into reporte values (null,'11111111', 'Sara', 'Ali','2017-01-04' ,'08:30:00','12:30:00','14:00:00','18:00:00',null,null);
@@ -61,3 +60,20 @@ insert into reporte values (null,'22222222', 'Edwin', 'Alanoca','2017-01-28' ,nu
 insert into reporte values (null,'22222222', 'Edwin', 'Alanoca','2017-01-29' ,null,null,null,null,null,null);
 insert into reporte values (null,'22222222', 'Edwin', 'Alanoca','2017-01-30' ,'08:30:00','12:30:00','14:00:00','18:00:00',null,null);
 insert into reporte values (null,'22222222', 'Edwin', 'Alanoca','2017-01-31' ,'08:30:00','12:30:00','14:00:00','18:00:00',null,null);
+
+
+
+create table reporte 
+(
+    id int primary key AUTO_INCREMENT,
+    ci varchar(50),
+    nombre varchar(50),
+    paterno varchar(50),
+    fecha date,
+    em time,
+    sm time,
+    et time,
+    st time,
+    obs varchar(50),
+    mr int
+)
