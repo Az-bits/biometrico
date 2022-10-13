@@ -12,77 +12,27 @@ class Home extends BaseController
 {
     public function index()
     {
-    }
-    public function test()
-    {
-        $reporte = new ReporteModel();
-        $data = $reporte->orderBy('fecha')->where('ci', '22222222')->findAll();
+        // $a = [
+        //     "uno" => 1,
+        //     "dos" => 2,
+        //     "tres" => 3,
+        //     "diecisiete" => 17
+        // ];
 
-        //min retrado
-        $minAtraso = $data[0]['mr'];
-
-        //cantidad dias habiles mes
-        $cDiasHabiles = $this->getDiasHabiles($data);
-        $mAtraso = $minAtraso;
-        $sum = 0;
-        // for ($i = 0; $i < 17; $i++) {
-        //     $data[rand(0, 17)];
+        // foreach ($a as $k => $v) {
+        //     echo $k . $v;
         // }
-        // var_dump($data[rand(0, 17)]['em']);
-        $i = 1;
-
-        //min retraso formateados
-
-        $minFormat = $this->getArrayHourFormated($minAtraso, $cDiasHabiles);
-
-        // foreach ($data as $key => $d) {
-        //     if ($minAtraso > 0 && $minAtraso <= $mAtraso) {
-        //         if ($d['em'] !== null) {
-        //             $min = rand(0, 14);
-        //             $sum = $sum + $min;
-        //             $minAtraso = $minAtraso - $min;
-        //             $this->addMinutes($d['fecha'], $d['em'], $min, $i);
-        //             $i++;
-        //         }
-        //     } else {
-        //         if ($minAtraso > 0) {
-        //             $minAtraso = $mAtraso - $sum;
-        //         }
-        //         $this->addMinutes($d['fecha'], $d['em'], $minAtraso, $i);
-        //         $minAtraso = 0;
-        //         $i++;
-
-        //         // echo 'total ' . (($mAtraso - $sum) + $sum);
-        //     }
-        // }
-        // echo $sum;
-        // return view('welcome_message', $data = ['data' => $data]);
-    }
-    public function getArrayHourFormated($minAtraso, $cDiasHabiles)
-    {
-        $hours = [];
-        $this->randomNumber($minAtraso, $cDiasHabiles);
-    }
-    public function addMinutes($fechaEL = null, $hora = null, $min = null, $i)
-    {
-        $fecha = new DateTime($fechaEL);
-        $day = date('d', strtotime($fecha->format('Y-m-d')));
-        $daySig = date("D", strtotime($fechaEL));
-        if ($hora !== null) {
-            if (!($daySig === 'Sun' || $daySig === 'Sat')) {
-                // echo '<br>' . $min . ' min ' . '<br>';
-                $nHora = strtotime("+" . $min . " minute", strtotime($hora));
-                $fHora = strtotime("+" . rand(0, 59) . " second", $nHora);
-                echo $i . ' ' . date('h:i:s', $fHora) . ' ' . $day . '<br>';
-            }
-        }
+        $this->randomNumber(null, null);
     }
 
-    public function randomNumber($minAtraso, $cDiasHabiles)
+
+    /**
+     * begin::funciones para agregar minutos de retraso a marcado
+     */
+    public function randomNumber($minutes_delay, $number_business_days)
     {
-        /** Números Random  */
-        $hourDefault = '08:05:00';
-        $rand = range(1, $cDiasHabiles);
+        // genera un array de numeros random apartir de los min atrasos
+        $rand = range(1, $number_business_days); // genera un rango de numeros
         shuffle($rand);
         foreach ($rand as $val) {
             echo $val . ', ';
@@ -92,13 +42,13 @@ class Home extends BaseController
         }
         /** */
         echo '<br>';
-        $j = $minAtraso;
+        $j = $minutes_delay;
         $array = [];
         $sum = 0;
-        $minAtraso = $j;
-        for ($i = 0; $i < $cDiasHabiles; $i++) {
+        $minutes_delay = $j;
+        for ($i = 0; $i < $number_business_days; $i++) {
             $ran =  rand(0, 17);
-            if ($sum + $ran < $minAtraso) {
+            if ($sum + $ran < $minutes_delay) {
                 $sum += $ran;
                 $array = array_merge($array, [$ran]);
                 echo $ran . ', ';
@@ -122,16 +72,55 @@ class Home extends BaseController
             echo $a . ', ';
         }
     }
-    public function getDiasHabiles($data)
+
+    /**
+     * end::funciones para agregar minutos de retraso a marcado
+     */
+
+
+
+
+
+
+    /**
+     * begin::funciones para fecha
+     */
+
+    public function get_if_business_day($date = null)
     {
-        //cuantos dias habiles en el mes
-        $i = 0;
-        foreach ($data as $key => $value) {
-            $daySig = date("D", strtotime($value['fecha']));
-            if (!($daySig === 'Sun' || $daySig === 'Sat')) {
-                $i++;
-            }
+        //si el dia es habil
+        $daySig = date("D", strtotime($date));
+        if (!($daySig === 'Sun' || $daySig === 'Sat')) {
+            return true;
+        } else {
+            return false;
         }
-        return $i;
     }
+    public function get_number_days_month($date = null)
+    {
+        // numero de dias de un mes
+        $f1 = new DateTime(date('Y-m-t', strtotime($date))); // ultima fecha del mes
+        $f2 = new DateTime(date('Y-m-00', strtotime($date))); //primer dia del mes menos 1
+        return $f1->diff($f2)->days; // # dias 
+    }
+    public function get_number_days_business_month($get_date = null)
+    {
+        # de dias habiles de un mes
+        $cont = 0;
+        $number_days_month = $this->get_number_days_month($get_date); // #dias
+        $date = date('Y-m-01', strtotime($get_date));
+        for ($i = 1; $i <= $number_days_month; $i++) {
+            !$this->get_if_business_day($date) ?: $cont++;
+            $date = date('Y-m-d', strtotime("+1 day", strtotime($date))); // ++day
+        }
+        return $cont;
+    }
+    public function add_moth_date($date = null)
+    {
+        // incrementa un mes ala fecha actual
+        return date("d-m-Y", strtotime(date('Y-m-d', strtotime($date)) . "+ 1 month"));
+    }
+    /**
+     * end::funciones para fecha
+     */
 }

@@ -51,13 +51,13 @@ class Person extends BaseController
     public function extra()
     {
         $Days = [
-            0 => 'Sun',
-            1 => 'Mon',
-            2 => 'Tue',
-            3 => 'Wed',
-            4 => 'Thu',
-            5 => 'Fri',
-            6 => 'Sat'
+            0 => 'Sun', //domingo
+            1 => 'Mon', //lunes
+            2 => 'Tue', //martes
+            3 => 'Wed', //miercoles
+            4 => 'Thu', //jueves
+            5 => 'Fri', //viernes
+            6 => 'Sat'  //sabado
         ];
         // $ultimoDia = date('d', strtotime($fecha->format('Y-m-t')));
 
@@ -154,5 +154,50 @@ class Person extends BaseController
         foreach ($array as $key => $a) {
             echo $a . ', ';
         }
+    }
+    public function test()
+    {
+        // $reporte = new ReporteModel();
+        // $data = $reporte->orderBy('fecha')->where('ci', '22222222')->findAll();
+
+        //min retrado
+        // $minAtraso = $data[0]['mr'];
+
+        //cantidad dias habiles mes
+        // $cDiasHabiles = $this->getDiasHabiles($data);
+        // $mAtraso = $minAtraso;
+        $sum = 0;
+        // for ($i = 0; $i < 17; $i++) {
+        //     $data[rand(0, 17)];
+        // }
+        // var_dump($data[rand(0, 17)]['em']);
+        $i = 1;
+
+        //min retraso formateados
+
+        // $minFormat = $this->getArrayHourFormated($minAtraso, $cDiasHabiles);
+
+        // foreach ($data as $key => $d) {
+        //     if ($minAtraso > 0 && $minAtraso <= $mAtraso) {
+        //         if ($d['em'] !== null) {
+        //             $min = rand(0, 14);
+        //             $sum = $sum + $min;
+        //             $minAtraso = $minAtraso - $min;
+        //             $this->addMinutes($d['fecha'], $d['em'], $min, $i);
+        //             $i++;
+        //         }
+        //     } else {
+        //         if ($minAtraso > 0) {
+        //             $minAtraso = $mAtraso - $sum;
+        //         }
+        //         $this->addMinutes($d['fecha'], $d['em'], $minAtraso, $i);
+        //         $minAtraso = 0;
+        //         $i++;
+
+        //         // echo 'total ' . (($mAtraso - $sum) + $sum);
+        //     }
+        // }
+        // echo $sum;
+        // return view('welcome_message', $data = ['data' => $data]);
     }
 }

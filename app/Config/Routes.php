@@ -38,8 +38,9 @@ $routes->set404Override();
 $routes->get('/home', 'Home::index');
 $routes->get('/test', 'Home::test');
 $routes->get('/random', 'Home::randomNumber');
-$routes->get('/', 'Person::index');
+$routes->get('/', 'Home::index');
 $routes->get('/getDay', 'Home::getDiasMonth');
+$routes->get('/get_business_day', 'Home::get_business_day');
 
 /*
  * --------------------------------------------------------------------
