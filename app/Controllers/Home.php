@@ -22,26 +22,48 @@ class Home extends BaseController
         // foreach ($a as $k => $v) {
         //     echo $k . $v;
         // }
-        $this->randomNumber(null, null);
+        // $rand = range(1, 20);
+        // shuffle($rand);
+        // var_dump(json_encode($this->generate_array_hours()));
+        foreach ($this->generate_array_hours() as $key => $value) {
+            echo $value . '<br>';
+        }
     }
 
 
     /**
      * begin::funciones para agregar minutos de retraso a marcado
      */
-    public function randomNumber($minutes_delay, $number_business_days)
+
+    public function generate_array_hours()
+    {
+        // genera un array de horas
+
+        $array = [];
+        $array_numbers = $this->genera_array_numbers(120, 20);
+        foreach ($array_numbers as $key => $value) {
+            $array =  array_merge($array, [$this->add_minutes($value)]);
+        }
+        return $array;
+    }
+
+    public function add_minutes($minute)
+    {
+        // añade minutos a una hora
+
+        $hour = '08:00:00';
+        $new_hour = strtotime("+" . $minute . " minute", strtotime($hour)); // add minute
+        $new_hour = strtotime("+" . rand(0, 59) . " second", $new_hour); // add seconds
+        // echo date('h:i:s', $new_hour) . '<br>';
+        return date('h:i:s', $new_hour);
+    }
+
+    public function genera_array_numbers($minutes_delay, $number_business_days)
     {
         // genera un array de numeros random apartir de los min atrasos
-        $rand = range(1, $number_business_days); // genera un rango de numeros
-        shuffle($rand);
-        foreach ($rand as $val) {
-            echo $val . ', ';
 
-            // $nHora = strtotime("+" . $val . " minute", strtotime($hourDefault));
-            // echo date('h:i:s', $nHora) . '<br> ';
-        }
-        /** */
-        echo '<br>';
+        $rand = range(1, $number_business_days); // genera un rango de numeros
+        shuffle($rand); // mezcla el array
         $j = $minutes_delay;
         $array = [];
         $sum = 0;
@@ -51,35 +73,20 @@ class Home extends BaseController
             if ($sum + $ran < $minutes_delay) {
                 $sum += $ran;
                 $array = array_merge($array, [$ran]);
-                echo $ran . ', ';
             } else if ($sum != $j) {
                 $array = array_merge($array, [$j - $sum]);
-                echo $j - $sum . ', ';
                 $sum = $j;
             } else {
-                $array = array_merge($array, [0]);
-                echo 0 . ', ';
+                $array = array_merge($array, [rand(-5, 0)]);
             }
         }
-
-        echo '<br>';
-        echo 'suma : ' .  $sum;
-        echo '<br>';
         shuffle($array);
-        echo '<br>';
-
-        foreach ($array as $key => $a) {
-            echo $a . ', ';
-        }
+        return $array;
     }
 
     /**
      * end::funciones para agregar minutos de retraso a marcado
      */
-
-
-
-
 
 
     /**
@@ -96,6 +103,7 @@ class Home extends BaseController
             return false;
         }
     }
+
     public function get_number_days_month($date = null)
     {
         // numero de dias de un mes
@@ -103,6 +111,7 @@ class Home extends BaseController
         $f2 = new DateTime(date('Y-m-00', strtotime($date))); //primer dia del mes menos 1
         return $f1->diff($f2)->days; // # dias 
     }
+
     public function get_number_days_business_month($get_date = null)
     {
         # de dias habiles de un mes
@@ -115,11 +124,14 @@ class Home extends BaseController
         }
         return $cont;
     }
+
     public function add_moth_date($date = null)
     {
         // incrementa un mes ala fecha actual
         return date("d-m-Y", strtotime(date('Y-m-d', strtotime($date)) . "+ 1 month"));
     }
+
+
     /**
      * end::funciones para fecha
      */

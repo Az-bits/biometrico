@@ -72,4 +72,28 @@ class test extends BaseController
             echo $a . ', ';
         }
     }
+
+    public function asdf($minutes_delay, $number_business_days)
+    {
+        // genera un array de numeros random apartir de los min atrasos
+        $rand = range(1, $number_business_days); // genera un rango de numeros
+        shuffle($rand); // mezcla el array
+        $j = $minutes_delay;
+        $array = [];
+        $sum = 0;
+        $minutes_delay = $j;
+        for ($i = 0; $i < $number_business_days; $i++) {
+            $ran =  rand(0, 17);
+            if ($sum + $ran < $minutes_delay) {
+                $sum += $ran;
+                $array = array_merge($array, [$ran]);
+            } else if ($sum != $j) {
+                $array = array_merge($array, [$j - $sum]);
+                $sum = $j;
+            } else {
+                $array = array_merge($array, [0]);
+            }
+        }
+        return shuffle($array);
+    }
 }
